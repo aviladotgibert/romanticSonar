@@ -1,0 +1,21 @@
+# Entornos Python
+venv/
+.env
+*.pyc
+__pycache__/
+
+# Tokens
+*.env
+.env.local
+
+# Base de datos
+data/*.db
+
+# Docker
+ollama_data/
+**/Dockerfile~
+docker-compose.override.yml
+
+# Logs
+*.log
+

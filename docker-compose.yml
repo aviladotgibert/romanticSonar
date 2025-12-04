@@ -1,0 +1,45 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_sonar
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./Modelfile:/tmp/Modelfile
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  bot_service:
+    build: ./bot_service
+    container_name: sonar_bot_service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - DATABASE_PATH=/app/data/romantic_bot.db
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    command: >
+      sh -c "sleep 10 && python app.py"
+
+  telegram-bot:
+    build: ./telegram_bot
+    container_name: sonar_telegram_bot
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - BOT_API_URL=http://bot_service:5000
+    depends_on:
+      - bot_service
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+    driver: local
