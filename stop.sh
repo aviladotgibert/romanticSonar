@@ -23,7 +23,7 @@ docker exec ollama_sonar ollama delete sonar 2>/dev/null
 echo "Eliminando imágenes de Docker relacionadas..."
 docker rmi sonar_telegram_bot 2>/dev/null
 docker rmi sonar_api 2>/dev/null
-docker rmi romantic_bot-bot-service 2>/dev/null
+docker rmi romantic-bot-bot_service 2>/dev/null
 docker rmi romantic-bot-telegram-bot 2>/dev/null
 
 # Limpieza de volúmenes (opcional, descomenta si quieres borrar TODO)
